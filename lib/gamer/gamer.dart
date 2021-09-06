@@ -11,6 +11,11 @@ const GAME_PAD_MATRIX_H = 20;
 ///the width of game pad
 const GAME_PAD_MATRIX_W = 10;
 
+enum GameControllerType{
+ touch,
+ gamePad,
+}
+
 ///state of [GameControl]
 enum GameStates {
   ///随时可以开启一把惊险而又刺激的俄罗斯方块
@@ -37,6 +42,8 @@ enum GameStates {
 
   ///方块快速下坠到底部
   drop,
+
+  isStarting,
 }
 
 class Game extends StatefulWidget {
@@ -125,6 +132,10 @@ class GameControl extends State<Game> with RouteAware {
 
   GameStates _states = GameStates.none;
 
+  int _countDown = 3;
+
+  GameControllerType _controllerType = GameControllerType.touch;
+
   Block _getNext() {
     final next = _next;
     _next = Block.getRandom();
@@ -141,6 +152,11 @@ class GameControl extends State<Game> with RouteAware {
         _sound.rotate();
       }
     }
+    setState(() {});
+  }
+
+  void setGameControllerType(GameControllerType gameControllerType){
+    _controllerType = gameControllerType;
     setState(() {});
   }
 
@@ -185,7 +201,7 @@ class GameControl extends State<Game> with RouteAware {
       }
       setState(() {});
     } else if (_states == GameStates.paused || _states == GameStates.none) {
-      _startGame();
+      _startGame(false);
     }
   }
 
@@ -272,7 +288,7 @@ class GameControl extends State<Game> with RouteAware {
       return;
     } else {
       //游戏尚未结束，开启下一轮方块下落
-      _startGame();
+      _startGame(false);
     }
   }
 
@@ -314,14 +330,14 @@ class GameControl extends State<Game> with RouteAware {
     if (_states == GameStates.running) {
       pause();
     } else if (_states == GameStates.paused || _states == GameStates.none) {
-      _startGame();
+      _startGame(true);
     }
   }
 
   void reset() {
     if (_states == GameStates.none) {
       //可以开始游戏
-      _startGame();
+      _startGame(false);
       return;
     }
     if (_states == GameStates.reset) {
@@ -359,13 +375,38 @@ class GameControl extends State<Game> with RouteAware {
     }();
   }
 
-  void _startGame() {
+  void _startGame(bool isFromPauseOrResume) {
     if (_states == GameStates.running && _autoFallTimer?.isActive == false) {
       return;
     }
-    _states = GameStates.running;
-    _autoFall(true);
-    setState(() {});
+    if (isFromPauseOrResume) {
+      setState(() {
+        _states = GameStates.isStarting;
+      });
+      Timer.periodic(Duration(milliseconds: 800), (timer) {
+        if (_countDown > 1 && timer.isActive) {
+          print(_countDown);
+          setState(() {
+            _countDown--;
+          });
+          print(_countDown);
+        } else {
+          setState(() {
+            _countDown = 3;
+            _states = GameStates.running;
+            _autoFall(true);
+          });
+          timer.cancel();
+        }
+      });
+      // Future.delayed(Duration(seconds: 3), (){
+      // });
+    } else {
+      setState(() {
+        _states = GameStates.running;
+        _autoFall(true);
+      });
+    }
   }
 
   @override
@@ -383,9 +424,9 @@ class GameControl extends State<Game> with RouteAware {
         mixed[i][j] = value;
       }
     }
-    debugPrint("game states : $_states");
-    return GameState(
-        mixed, _states, _level, _sound.mute, _points, _cleared, _next,
+    // debugPrint("game states : $_states");
+    return GameState(mixed, _states, _level, _sound.mute, _points, _cleared,
+        _next, _countDown, _controllerType,
         child: widget.child);
   }
 
@@ -398,7 +439,7 @@ class GameControl extends State<Game> with RouteAware {
 
 class GameState extends InheritedWidget {
   GameState(this.data, this.states, this.level, this.muted, this.points,
-      this.cleared, this.next,
+      this.cleared, this.next, this.countDown, this.gameControllerType,
       {Key key, this.child})
       : super(key: key, child: child);
 
@@ -421,6 +462,10 @@ class GameState extends InheritedWidget {
   final int cleared;
 
   final Block next;
+
+  final int countDown;
+
+  final GameControllerType gameControllerType;
 
   static GameState of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<GameState>();

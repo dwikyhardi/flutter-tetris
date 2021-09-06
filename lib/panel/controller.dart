@@ -46,20 +46,22 @@ class DirectionController extends StatelessWidget {
                   Transform.scale(
                     scale: 1.5,
                     child: Transform.rotate(
-                        angle: -math.pi / 4,
-                        child: Icon(
-                          Icons.arrow_drop_up,
-                          size: _iconSize,
-                        )),
+                      angle: -math.pi / 4,
+                      child: Icon(
+                        Icons.arrow_drop_up,
+                        size: _iconSize,
+                      ),
+                    ),
                   ),
                   Transform.scale(
                     scale: 1.5,
                     child: Transform.rotate(
-                        angle: -math.pi / 4,
-                        child: Icon(
-                          Icons.arrow_right,
-                          size: _iconSize,
-                        )),
+                      angle: -math.pi / 4,
+                      child: Icon(
+                        Icons.arrow_right,
+                        size: _iconSize,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -69,20 +71,22 @@ class DirectionController extends StatelessWidget {
                   Transform.scale(
                     scale: 1.5,
                     child: Transform.rotate(
-                        angle: -math.pi / 4,
-                        child: Icon(
-                          Icons.arrow_left,
-                          size: _iconSize,
-                        )),
+                      angle: -math.pi / 4,
+                      child: Icon(
+                        Icons.arrow_left,
+                        size: _iconSize,
+                      ),
+                    ),
                   ),
                   Transform.scale(
                     scale: 1.5,
                     child: Transform.rotate(
-                        angle: -math.pi / 4,
-                        child: Icon(
-                          Icons.arrow_drop_down,
-                          size: _iconSize,
-                        )),
+                      angle: -math.pi / 4,
+                      child: Icon(
+                        Icons.arrow_drop_down,
+                        size: _iconSize,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -230,7 +234,7 @@ class _Button extends StatefulWidget {
       @required this.size,
       @required this.onTap,
       this.icon,
-      this.color = Colors.blue,
+      this.color = Colors.lightBlue,
       this.enableLongPress = true})
       : super(key: key);
 

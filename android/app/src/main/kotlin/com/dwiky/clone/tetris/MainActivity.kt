@@ -1,4 +1,4 @@
-package tech.soit.flutter_tetris
+package com.dwiky.clone.tetris
 
 import io.flutter.embedding.android.FlutterActivity
 

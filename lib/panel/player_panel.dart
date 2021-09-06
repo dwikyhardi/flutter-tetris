@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tetris/material/briks.dart';
 import 'package:tetris/material/images.dart';
@@ -21,7 +23,7 @@ class PlayerPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("size : $size");
+    // debugPrint("size : $size");
     return SizedBox.fromSize(
       size: size,
       child: Container(
@@ -68,8 +70,75 @@ class _GameUninitialized extends StatelessWidget {
             IconDragon(animate: true),
             SizedBox(height: 16),
             Text(
-              "tetrix",
+              "tetrita",
               style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      );
+    } else if(GameState.of(context).states == GameStates.paused){
+      return Container(
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.blue[100].withOpacity(0.6),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconDragon(animate: true),
+            SizedBox(height: 16),
+            Text(
+              "Paused",
+              style: TextStyle(fontSize: 20),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Game.of(context).pauseOrResume();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                    fixedSize: Size(100, 25),
+                    minimumSize: Size(100, 25),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Text('Play'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Game.of(context).reset();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
+                    fixedSize: Size(100, 25),
+                    minimumSize: Size(100, 25),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Text('Reset'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else if(GameState.of(context).states == GameStates.isStarting){
+      return Container(
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.blue[100].withOpacity(0.6),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              "Starting in ...",
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              GameState.of(context).countDown.toString(),
+              style: TextStyle(fontSize: 76),
             ),
           ],
         ),

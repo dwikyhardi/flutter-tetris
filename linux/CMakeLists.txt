@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "flutter_tetris")
-set(APPLICATION_ID "tech.soit.flutter_tetris")
+set(APPLICATION_ID "com.dwiky.clone.tetris")
 
 cmake_policy(SET CMP0063 NEW)
 
