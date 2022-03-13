@@ -35,7 +35,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'tetris',
-      localizationsDelegates: [S.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
       navigatorObservers: [routeObserver],
       supportedLocales: S.delegate.supportedLocales,
       theme: ThemeData(
@@ -43,7 +47,13 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Sound(child: Game(child: KeyboardController(child: _HomePage()))),
+        body: Sound(
+          child: Game(
+            child: KeyboardController(
+              child: _HomePage(),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -56,9 +66,6 @@ const BACKGROUND_COLOR = Colors.blue;
 class _HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //only Android/iOS support land mode
-    bool land = MediaQuery.of(context).orientation == Orientation.landscape;
-    // return land ? PageLand() : PagePortrait();
     return PagePortrait();
   }
 }
